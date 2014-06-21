@@ -9,7 +9,7 @@ RADIO >> AUDIO CABLE >> PC >> (OPTIONAL) AUDIO CABLE >> (OPTIONAL) SPEAKERS
 
 ## Why
 
-![Gary and Verne](https://github.com/stevenryoung/RadioDelay/resources/gary_verne.jpg)
+![Gary and Verne](https://github.com/stevenryoung/RadioDelay/resources/verne_gary.jpg)
 
 National broadcast announcers are not as interesting to listen to when you are watching your team play. Thus, it is nice to listen to your local radio broadcast when you are watching the TV broadcast. However, radio broadcasts are often 10-30 seconds ahead of the TV broadcast and ruin the experience of watching the game. You cannot make your play the game sooner with your DVR, so you must make the radio play later. This tool allows you to do that.
 
