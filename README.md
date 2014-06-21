@@ -15,4 +15,4 @@ National broadcast announcers are not as interesting to listen to when you are w
 
 ## Why not just get the radio broadcast online?
 
-Online radio often does not allow you to pause. Tools could be written to capture these streams, but this would rely on the radio stations not changing their online player. There are probably some things that could be done to capture the aduio output of the online player, however, I just found this to be the simplest way to tackle the problem. It is simple enough, and reliable enough, for my purposes and is straight forward enough for both me to use and people who are only mildly tech literate.
+Online radio often does not allow you to pause in order to delay the radio. Tools could be written to capture these streams, but this would rely on the radio stations not changing their online player. There are probably some things that could be done to capture the aduio output of the online player, however, I just found this to be the simplest way to tackle the problem. It is simple enough, and reliable enough, for my purposes and is straight forward enough for both me to use and people who are only mildly tech literate.
