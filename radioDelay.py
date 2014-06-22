@@ -137,12 +137,7 @@ def main():
             else:
                 print "Please use a delay longer than 0 sec."   
         except:
-            if "show" in inp: # Show license
-                path = os.path.dirname(os.path.realpath(sys.argv[0]))
-                license_file = os.path.join(path,'LICENSE')
-                with open(license_file, 'r') as fin:
-                    for i in range(11):
-                        print(fin.readline()),
+            if "show" in inp: # Give link to license
                 print "See the copy of GPLv3 provided with this program"
                 print "or <http://www.gnu.org/licenses/> for more details."
             else:
