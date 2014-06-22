@@ -45,11 +45,11 @@ def delay_loop(channels=2, filename='default.wav', conn=[]):
 
     # Initialize Stream
     stream = p.open(format=p.get_format_from_width(WIDTH),
-		 channels=channels,
-		 rate=SAMPLE_RATE,
-		 input=True,
-		 output=True,
-		 frames_per_buffer=CHUNK)
+                    channels=channels,
+                    rate=SAMPLE_RATE,
+                    input=True,
+                    output=True,
+                    frames_per_buffer=CHUNK)
 
     # Establish some parameters
     bps = float(SAMPLE_RATE)/float(CHUNK) # blocks per second
@@ -83,13 +83,13 @@ def delay_loop(channels=2, filename='default.wav', conn=[]):
         # Write output and read next input
         buff[widx] = stream.read(CHUNK)    
 
-	try:
+        try:
             stream.write(buff[ridx],CHUNK,exception_on_underflow=True)
         except IOError: # underflow, priming the output
             print "Underflow Occured"
-	    stream.stop_stream()
-	    stream.close()
-	    stream = p.open(format=p.get_format_from_width(WIDTH),
+        stream.stop_stream()
+        stream.close()
+        stream = p.open(format=p.get_format_from_width(WIDTH),
                             channels=channels,
                             rate=SAMPLE_RATE,
                             input=True,
@@ -98,7 +98,7 @@ def delay_loop(channels=2, filename='default.wav', conn=[]):
             for i in range(5):
                 stream.write('0'*blocksize,CHUNK,exception_on_underflow=False)
         
-	# Update write and read pointers
+    # Update write and read pointers
         widx += 1
         ridx += 1
         if widx == bfflen:
@@ -112,11 +112,11 @@ def delay_loop(channels=2, filename='default.wav', conn=[]):
             if desireddelay:
                 ridx = int((widx - int(desireddelay*bps)) % bfflen)
             else:
-		stream.stop_stream()
-		stream.close()
+        stream.stop_stream()
+        stream.close()
                 break
 
-	    write_terminal(desireddelay)
+        write_terminal(desireddelay)
 
 
 def main():
