@@ -14,8 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import alsaaudio
-import audioop
+import pyaudio
 from multiprocessing import Process, Pipe
 import os
 import sys
@@ -23,7 +22,8 @@ import time
 
 DELAY_PROMPT = 'Enter your desired delay in seconds. Enter -1 to quit.\n'
 SAMPLE_RATE = 44100
-PERIOD_SIZE = 160
+CHUNK = 2048
+WIDTH = 2
 
 COPYRIGHT = ('RadioDelay (aka Verne-Be-Gone)\n'
              'Copyright (C) 2014  Steven Young <stevenryoung@gmail.com>\n'
@@ -31,57 +31,74 @@ COPYRIGHT = ('RadioDelay (aka Verne-Be-Gone)\n'
              'This is free software, and you are welcome to redistribute it\n'
              'under certain conditions; type "show details" for more info\n')
 
+def write_terminal(desireddelay):
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print COPYRIGHT
+    print "Delay (seconds):", desireddelay
+    print DELAY_PROMPT
+    
+
 def delay_loop(channels=2, filename='default.wav', conn=[]):
 
-    # Initialize Audio Input
-    inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL)
-    inp.setchannels(channels) # 1==mono, 2==stereo
-    inp.setrate(SAMPLE_RATE) # 44100 Hz
-    inp.setformat(alsaaudio.PCM_FORMAT_S16_LE) # 16 bit little endian samples
-    inp.setperiodsize(PERIOD_SIZE)
-   
-    # Initialize Audio Output 
-    out = alsaaudio.PCM(alsaaudio.PCM_PLAYBACK)
-    out.setchannels(channels)
-    out.setrate(SAMPLE_RATE)
-    out.setformat(alsaaudio.PCM_FORMAT_S16_LE)
-    blocksize = PERIOD_SIZE * 2 * channels
-    out.setperiodsize(PERIOD_SIZE)
+    # Initialize PyAudio
+    p = pyaudio.PyAudio()
+
+    # Initialize Stream
+    stream = p.open(format=p.get_format_from_width(WIDTH),
+		 channels=channels,
+		 rate=SAMPLE_RATE,
+		 input=True,
+		 output=True,
+		 frames_per_buffer=CHUNK)
 
     # Establish some parameters
-    bps = float(SAMPLE_RATE)/float(PERIOD_SIZE) #275.625 # Blocks collected per second
+    bps = float(SAMPLE_RATE)/float(CHUNK) # blocks per second
     desireddelay = 5.0 # delay in seconds
     buffersecs = 300 # size of buffer in seconds
     
     # Create buffer
-    bfflen = buffersecs*bps
-    data = [ 0 for x in range(int(bfflen)) ]
+    bfflen = int(buffersecs*bps)
+    buff = [ 0 for x in range(bfflen) ]
     
     # Establish initial buffer pointer
     widx = int(desireddelay*bps) # pointer to write position
     ridx = 0 # pointer to read position
     
     # Prewrite empty data to buffer to be read
-    for tmp in range(int(bfflen)):
-        data[tmp] = '0' * blocksize
+    blocksize = len(stream.read(CHUNK))
+    for tmp in range(bfflen):
+        buff[tmp] = '0' * blocksize
         
-    # Preload data into output to avoid stuttering during playback
-    for tmp in range(10):
-        out.write('0'*blocksize)
+    print "Seconds per block: " + str(float(1/bps))
         
     # Write to command prompt
-    os.system('clear')
-    print COPYRIGHT
-    print "Delay (seconds):", desireddelay
-    print DELAY_PROMPT
-    
+    write_terminal(desireddelay)
+
+    # Preload data into output to avoid stuttering during playback
+    for tmp in range(5):
+        stream.write('0'*blocksize,CHUNK)
+
     # Loop until program terminates
     while True:
         # Write output and read next input
-        out.write(data[ridx])
-        l, data[widx] = inp.read()
+        buff[widx] = stream.read(CHUNK)    
+
+	try:
+            stream.write(buff[ridx],CHUNK,exception_on_underflow=True)
+        except IOError: # underflow, priming the output
+            print "Underflow Occured"
+	    stream.stop_stream()
+	    stream.close()
+	    stream = p.open(format=p.get_format_from_width(WIDTH),
+                            channels=channels,
+                            rate=SAMPLE_RATE,
+                            input=True,
+                            output=True,
+                            frames_per_buffer=CHUNK)
+            for i in range(5):
+                stream.write('0'*blocksize,CHUNK,exception_on_underflow=False)
         
-        # Update write and read pointers
+	# Update write and read pointers
         widx += 1
         ridx += 1
         if widx == bfflen:
@@ -95,11 +112,11 @@ def delay_loop(channels=2, filename='default.wav', conn=[]):
             if desireddelay:
                 ridx = int((widx - int(desireddelay*bps)) % bfflen)
             else:
+		stream.stop_stream()
+		stream.close()
                 break
-            os.system('clear')
-            print COPYRIGHT
-            print "Delay (seconds):", desireddelay
-            print DELAY_PROMPT
+
+	    write_terminal(desireddelay)
 
 
 def main():
