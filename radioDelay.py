@@ -111,12 +111,11 @@ def delay_loop(channels=2, filename='default.wav', conn=[]):
             desireddelay = conn.recv()
             if desireddelay:
                 ridx = int((widx - int(desireddelay*bps)) % bfflen)
+                write_terminal(desireddelay)
             else:
                 stream.stop_stream()
                 stream.close()
                 break
-
-        write_terminal(desireddelay)
 
 
 def main():
