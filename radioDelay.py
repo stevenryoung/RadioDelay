@@ -98,7 +98,7 @@ def delay_loop(channels=2, filename='default.wav', conn=[]):
             for i in range(5):
                 stream.write('0'*blocksize,CHUNK,exception_on_underflow=False)
         
-    # Update write and read pointers
+        # Update write and read pointers
         widx += 1
         ridx += 1
         if widx == bfflen:
