@@ -19,7 +19,7 @@ National broadcast announcers are not as interesting to listen to as local broad
 
 Online radio often does not allow you to pause in order to delay the radio. Tools could be written to capture these streams, but this would rely on the radio stations not changing their online player. There are probably some things that could be done to capture the audio from the online player, however, I just found this to be the simplest way to tackle the problem. It is simple enough, and reliable enough, for my purposes and is straight forward enough for both me to use and people I know who are only mildly tech literate.
 
-## Requrements
+## Requirements
 
 [Python 2.7 (32-bit if using Windows)](https://www.python.org/download/releases/2.7.7/)
 
