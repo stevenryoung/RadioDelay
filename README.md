@@ -1,4 +1,4 @@
-RadioDelay (aka Verne-Be-Gone)
+Sports Radio Delay
 ==============================
 
 Python tool to delay radio (or any generic audio input)
@@ -10,8 +10,6 @@ RADIO >> AUDIO CABLE >> PC >> (OPTIONAL) AUDIO CABLE >> (OPTIONAL) SPEAKERS
 Run radioDelay.py and adjust delay as appropriate.
 
 ## Why?
-
-![Gary and Verne](resources/verne_gary.jpg?raw=true)
 
 National broadcast announcers are not as interesting to listen to when you are watching your team play. Thus, it is nice to listen to your local radio broadcast when you are watching the TV broadcast. However, radio broadcasts are often 10-30 seconds ahead of the TV broadcast and ruin the experience of watching the game. You cannot make your play the game sooner with your DVR, so you must make the radio play later. This tool allows you to do that.
 

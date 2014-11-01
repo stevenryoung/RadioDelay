@@ -1,4 +1,4 @@
-# RadioDelay (aka Verne-Be-Gone)
+# Sports Radio Delay
 # Copyright (C) 2014 Steven Young <stevenryoung@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ SAMPLE_RATE = 44100
 CHUNK = 2048
 WIDTH = 2
 
-COPYRIGHT = ('RadioDelay (aka Verne-Be-Gone)\n'
+COPYRIGHT = ('Sports Radio Delay\n'
              'Copyright (C) 2014  Steven Young <stevenryoung@gmail.com>\n'
              'This program comes with ABSOLUTELY NO WARRANTY.\n'
              'This is free software, and you are welcome to redistribute it\n'
@@ -98,7 +98,7 @@ def delay_loop(channels=2, filename='default.wav', conn=[]):
             for i in range(5):
                 stream.write('0'*blocksize,CHUNK,exception_on_underflow=False)
         
-    # Update write and read pointers
+        # Update write and read pointers
         widx += 1
         ridx += 1
         if widx == bfflen:
