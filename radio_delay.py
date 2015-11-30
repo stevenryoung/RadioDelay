@@ -1,5 +1,5 @@
 # Sports Radio Delay
-# Copyright (C) 2014 Steven Young <stevenryoung@gmail.com>
+# Copyright (C) 2014-2015 Steven Young <stevenryoung@gmail.com>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,27 +14,34 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import pyaudio
+import logging
+import logging.config
 from multiprocessing import Process, Pipe
 import os
-import sys
-import time
+import pyaudio
 
+# Initialize Logging
+logging.config.fileConfig('radio_delay_log_settings.ini')
+LOG = logging.getLogger('radio_delay')
+
+# Some Global Variables
+VERSION = 'v0.0.1'
 DELAY_PROMPT = 'Enter your desired delay in seconds. Enter -1 to quit.\n'
 SAMPLE_RATE = 44100
 CHUNK = 2048
 WIDTH = 2
 
 COPYRIGHT = ('Sports Radio Delay\n'
-             'Copyright (C) 2014  Steven Young <stevenryoung@gmail.com>\n'
+             'Copyright (C) 2014-2015  Steven Young <stevenryoung@gmail.com>\n'
              'This program comes with ABSOLUTELY NO WARRANTY.\n'
              'This is free software, and you are welcome to redistribute it\n'
              'under certain conditions; type "show details" for more info\n')
 
-def write_terminal(desireddelay):
+
+def write_terminal(desired_delay):
     os.system('cls' if os.name == 'nt' else 'clear')
     print COPYRIGHT
-    print "Delay (seconds):", desireddelay
+    print "Delay (seconds):", desired_delay
     print DELAY_PROMPT
     
 
@@ -119,6 +126,9 @@ def delay_loop(channels=2, filename='default.wav', conn=[]):
 
 
 def main():
+    # Print some info to log
+    LOG.info("Radio Delay - {}".format(VERSION))
+
     # Establish pipe for delay process
     pconn1, cconn1 = Pipe()
     p1 = Process(target=delay_loop, args=(2,'default.wav',cconn1))

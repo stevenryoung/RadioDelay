@@ -7,7 +7,7 @@ Python tool to delay radio (or any generic audio input)
 
 RADIO >> AUDIO CABLE >> PC >> (OPTIONAL) AUDIO CABLE >> (OPTIONAL) SPEAKERS
 
-Run radioDelay.py and adjust delay as appropriate.
+Run radio_delay.py and adjust delay as appropriate.
 
 ## Why?
 
