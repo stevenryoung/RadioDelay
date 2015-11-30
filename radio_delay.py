@@ -93,7 +93,7 @@ def delay_loop(channels=2, filename='default.wav', conn=[]):
         try:
             stream.write(buff[ridx],CHUNK,exception_on_underflow=True)
         except IOError: # underflow, priming the output
-            print "Underflow Occured"
+            LOG.warning("Underflow occurred", exc_info=True)
             stream.stop_stream()
             stream.close()
             stream = p.open(format=p.get_format_from_width(WIDTH),
