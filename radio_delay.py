@@ -30,6 +30,7 @@ DELAY_PROMPT = 'Enter your desired delay in seconds. Enter -1 to quit.\n'
 SAMPLE_RATE = 44100
 CHUNK = 2048
 WIDTH = 2
+CHANNELS = 2
 
 COPYRIGHT = ('Sports Radio Delay\n'
              'Copyright (C) 2014-2015  Steven Young <stevenryoung@gmail.com>\n'
@@ -43,68 +44,67 @@ def write_terminal(desired_delay):
     print COPYRIGHT
     print "Delay (seconds):", desired_delay
     print DELAY_PROMPT
-    
 
-def delay_loop(channels=2, filename='default.wav', conn=[]):
 
+def delay_loop(conn):
     # Initialize PyAudio
     p = pyaudio.PyAudio()
 
     # Initialize Stream
     stream = p.open(format=p.get_format_from_width(WIDTH),
-                    channels=channels,
+                    channels=CHANNELS,
                     rate=SAMPLE_RATE,
                     input=True,
                     output=True,
                     frames_per_buffer=CHUNK)
 
     # Establish some parameters
-    bps = float(SAMPLE_RATE)/float(CHUNK) # blocks per second
-    desireddelay = 5.0 # delay in seconds
-    buffersecs = 300 # size of buffer in seconds
-    
+    bps = float(SAMPLE_RATE) / float(CHUNK)  # blocks per second
+    desireddelay = 5.0  # delay in seconds
+    buffersecs = 300  # size of buffer in seconds
+
     # Create buffer
-    bfflen = int(buffersecs*bps)
-    buff = [ 0 for x in range(bfflen) ]
-    
+    bfflen = int(buffersecs * bps)
+    buff = [0 for x in range(bfflen)]
+
     # Establish initial buffer pointer
-    widx = int(desireddelay*bps) # pointer to write position
-    ridx = 0 # pointer to read position
-    
+    widx = int(desireddelay * bps)  # pointer to write position
+    ridx = 0  # pointer to read position
+
     # Prewrite empty data to buffer to be read
     blocksize = len(stream.read(CHUNK))
     for tmp in range(bfflen):
         buff[tmp] = '0' * blocksize
-        
-    print "Seconds per block: " + str(float(1/bps))
-        
+
+    print "Seconds per block: " + str(float(1 / bps))
+
     # Write to command prompt
     write_terminal(desireddelay)
 
     # Preload data into output to avoid stuttering during playback
     for tmp in range(5):
-        stream.write('0'*blocksize,CHUNK)
+        stream.write('0' * blocksize, CHUNK)
 
     # Loop until program terminates
     while True:
         # Write output and read next input
-        buff[widx] = stream.read(CHUNK)    
+        buff[widx] = stream.read(CHUNK)
 
         try:
-            stream.write(buff[ridx],CHUNK,exception_on_underflow=True)
-        except IOError: # underflow, priming the output
+            stream.write(buff[ridx], CHUNK, exception_on_underflow=True)
+        except IOError:  # underflow, priming the output
             LOG.warning("Underflow occurred", exc_info=True)
             stream.stop_stream()
             stream.close()
             stream = p.open(format=p.get_format_from_width(WIDTH),
-                            channels=channels,
+                            channels=CHANNELS,
                             rate=SAMPLE_RATE,
                             input=True,
                             output=True,
                             frames_per_buffer=CHUNK)
             for i in range(5):
-                stream.write('0'*blocksize,CHUNK,exception_on_underflow=False)
-        
+                stream.write('0' * blocksize, CHUNK, exception_on_underflow=False)
+
         # Update write and read pointers
         widx += 1
         ridx += 1
@@ -112,12 +112,12 @@ def delay_loop(channels=2, filename='default.wav', conn=[]):
             widx = 0
         if ridx == bfflen:
             ridx = 0
-        
+
         # Check for updated delay
         if conn.poll():
             desireddelay = conn.recv()
             if desireddelay:
-                ridx = int((widx - int(desireddelay*bps)) % bfflen)
+                ridx = int((widx - int(desireddelay * bps)) % bfflen)
                 write_terminal(desireddelay)
             else:
                 stream.stop_stream()
@@ -131,28 +131,29 @@ def main():
 
     # Establish pipe for delay process
     pconn1, cconn1 = Pipe()
-    p1 = Process(target=delay_loop, args=(2,'default.wav',cconn1))
+    p1 = Process(target=delay_loop, args=(cconn1,))
     p1.start()
-    
+
     # Loop to check for change in desired delay
     while True:
         inp = raw_input(DELAY_PROMPT)
         try:
             inp = float(inp)
-            if inp == -1.0: # Terminate
+            if inp == -1.0:  # Terminate
                 pconn1.send(False)
                 break
-            elif inp > 0.0: # Update delay
+            elif inp > 0.0:  # Update delay
                 pconn1.send(inp)
             else:
-                print "Please use a delay longer than 0 sec."   
+                print "Please use a delay longer than 0 sec."
         except:
-            if "show" in inp: # Give link to license
+            if "show" in inp:  # Give link to license
                 print "See the copy of GPLv3 provided with this program"
                 print "or <http://www.gnu.org/licenses/> for more details."
             else:
                 print "Improper input."
     p1.join()
-    
+
+
 if __name__ == '__main__':
     main()
