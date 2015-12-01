@@ -14,23 +14,30 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import gflags
+from gflags import FLAGS
 import logging
 import logging.config
 from multiprocessing import Process, Pipe
 import os
 import pyaudio
+import sys
 
 # Initialize Logging
 logging.config.fileConfig('radio_delay_log_settings.ini')
 LOG = logging.getLogger('radio_delay')
 
 # Some Global Variables
-VERSION = 'v0.0.1'
+RD_VERSION = 'v0.0.1'
 DELAY_PROMPT = 'Enter your desired delay in seconds. Enter -1 to quit.\n'
-SAMPLE_RATE = 44100
-CHUNK = 2048
-WIDTH = 2
-CHANNELS = 2
+
+# Configurable through command line options
+gflags.DEFINE_float('delay', 5, 'delay (s)')
+gflags.DEFINE_integer('sample_rate', 44100, 'sample rate (hz)')
+gflags.DEFINE_integer('chunk', 2048, 'chunk size (bytes)')
+gflags.DEFINE_integer('width', 2, 'width')
+gflags.DEFINE_integer('channels', 2, 'number of channels')
+
 
 COPYRIGHT = ('Sports Radio Delay\n'
              'Copyright (C) 2014-2015  Steven Young <stevenryoung@gmail.com>\n'
@@ -51,15 +58,15 @@ def delay_loop(conn):
     p = pyaudio.PyAudio()
 
     # Initialize Stream
-    stream = p.open(format=p.get_format_from_width(WIDTH),
-                    channels=CHANNELS,
-                    rate=SAMPLE_RATE,
+    stream = p.open(format=p.get_format_from_width(FLAGS.width),
+                    channels=FLAGS.channels,
+                    rate=FLAGS.sample_rate,
                     input=True,
                     output=True,
-                    frames_per_buffer=CHUNK)
+                    frames_per_buffer=FLAGS.chunk)
 
     # Establish some parameters
-    bps = float(SAMPLE_RATE) / float(CHUNK)  # blocks per second
+    bps = float(FLAGS.sample_rate) / float(FLAGS.chunk)  # blocks per second
     desireddelay = 5.0  # delay in seconds
     buffersecs = 300  # size of buffer in seconds
 
@@ -72,38 +79,37 @@ def delay_loop(conn):
     ridx = 0  # pointer to read position
 
     # Prewrite empty data to buffer to be read
-    blocksize = len(stream.read(CHUNK))
+    blocksize = len(stream.read(FLAGS.chunk))
     for tmp in range(bfflen):
         buff[tmp] = '0' * blocksize
-
-    print "Seconds per block: " + str(float(1 / bps))
 
     # Write to command prompt
     write_terminal(desireddelay)
 
     # Preload data into output to avoid stuttering during playback
     for tmp in range(5):
-        stream.write('0' * blocksize, CHUNK)
+        stream.write('0' * blocksize, FLAGS.chunk)
 
     # Loop until program terminates
     while True:
-        # Write output and read next input
-        buff[widx] = stream.read(CHUNK)
+        # Read next input
+        buff[widx] = stream.read(FLAGS.chunk)
 
+        # Write output
         try:
-            stream.write(buff[ridx], CHUNK, exception_on_underflow=True)
+            stream.write(buff[ridx], FLAGS.chunk, exception_on_underflow=True)
         except IOError:  # underflow, priming the output
             LOG.warning("Underflow occurred", exc_info=True)
             stream.stop_stream()
             stream.close()
-            stream = p.open(format=p.get_format_from_width(WIDTH),
-                            channels=CHANNELS,
-                            rate=SAMPLE_RATE,
+            stream = p.open(format=p.get_format_from_width(FLAGS.width),
+                            channels=FLAGS.channels,
+                            rate=FLAGS.sample_rate,
                             input=True,
                             output=True,
-                            frames_per_buffer=CHUNK)
+                            frames_per_buffer=FLAGS.chunk)
             for i in range(5):
-                stream.write('0' * blocksize, CHUNK, exception_on_underflow=False)
+                stream.write('0' * blocksize, FLAGS.chunk, exception_on_underflow=False)
 
         # Update write and read pointers
         widx += 1
@@ -125,9 +131,16 @@ def delay_loop(conn):
                 break
 
 
-def main():
+def main(argv):
     # Print some info to log
-    LOG.info("Radio Delay - {}".format(VERSION))
+    LOG.info("Radio Delay - {}".format(RD_VERSION))
+
+    # Read flags
+    try:
+      argv = FLAGS(argv)  # parse flags
+    except gflags.FlagsError, e:
+      print '%s\\nUsage: %s ARGS\\n%s' % (e, sys.argv[0], FLAGS)
+      sys.exit(1)
 
     # Establish pipe for delay process
     pconn1, cconn1 = Pipe()
@@ -156,4 +169,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
