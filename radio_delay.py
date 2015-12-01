@@ -32,7 +32,7 @@ RD_VERSION = 'v0.0.1'
 DELAY_PROMPT = 'Enter your desired delay in seconds. Enter -1 to quit.\n'
 
 # Configurable through command line options
-gflags.DEFINE_float('delay', 5, 'delay (s)')
+gflags.DEFINE_float('delay', 5.0, 'delay (s)')
 gflags.DEFINE_integer('sample_rate', 44100, 'sample rate (hz)')
 gflags.DEFINE_integer('chunk', 2048, 'chunk size (bytes)')
 gflags.DEFINE_integer('width', 2, 'width')
@@ -67,7 +67,7 @@ def delay_loop(conn):
 
     # Establish some parameters
     bps = float(FLAGS.sample_rate) / float(FLAGS.chunk)  # blocks per second
-    desireddelay = 5.0  # delay in seconds
+    desireddelay = FLAGS.delay  # delay in seconds
     buffersecs = 300  # size of buffer in seconds
 
     # Create buffer
