@@ -38,6 +38,7 @@ gflags.DEFINE_integer('chunk', 2048, 'chunk size (bytes)')
 gflags.DEFINE_integer('width', 2, 'width')
 gflags.DEFINE_integer('channels', 2, 'number of channels')
 gflags.DEFINE_integer('bffsz', 300, 'size of ring buffer (seconds)')
+gflags.DEFINE_integer('primelen', 5, 'number of chunks to prime output')
 
 COPYRIGHT = ('Sports Radio Delay\n'
              'Copyright (C) 2014-2015  Steven Young <stevenryoung@gmail.com>\n'
@@ -87,7 +88,7 @@ def delay_loop(conn):
     write_terminal(desireddelay)
 
     # Preload data into output to avoid stuttering during playback
-    for tmp in range(5):
+    for tmp in range(FLAGS.primelen):
         stream.write('0' * blocksize, FLAGS.chunk)
 
     # Loop until program terminates
@@ -108,7 +109,7 @@ def delay_loop(conn):
                             input=True,
                             output=True,
                             frames_per_buffer=FLAGS.chunk)
-            for i in range(5):
+            for i in range(FLAGS.primelen):
                 stream.write('0' * blocksize, FLAGS.chunk, exception_on_underflow=False)
 
         # Update write and read pointers
