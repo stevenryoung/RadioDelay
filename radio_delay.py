@@ -37,7 +37,7 @@ gflags.DEFINE_integer('sample_rate', 44100, 'sample rate (hz)')
 gflags.DEFINE_integer('chunk', 2048, 'chunk size (bytes)')
 gflags.DEFINE_integer('width', 2, 'width')
 gflags.DEFINE_integer('channels', 2, 'number of channels')
-
+gflags.DEFINE_integer('bffsz', 300, 'size of ring buffer (seconds)')
 
 COPYRIGHT = ('Sports Radio Delay\n'
              'Copyright (C) 2014-2015  Steven Young <stevenryoung@gmail.com>\n'
@@ -68,7 +68,7 @@ def delay_loop(conn):
     # Establish some parameters
     bps = float(FLAGS.sample_rate) / float(FLAGS.chunk)  # blocks per second
     desireddelay = FLAGS.delay  # delay in seconds
-    buffersecs = 300  # size of buffer in seconds
+    buffersecs = FLAGS.bffsz  # size of buffer in seconds
 
     # Create buffer
     bfflen = int(buffersecs * bps)
