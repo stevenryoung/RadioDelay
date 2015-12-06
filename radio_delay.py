@@ -30,6 +30,11 @@ LOG = logging.getLogger('radio_delay')
 # Some Global Variables
 RD_VERSION = 'v0.0.1'
 DELAY_PROMPT = 'Enter your desired delay in seconds. Enter -1 to quit.\n'
+COPYRIGHT = ('Sports Radio Delay\n'
+             'Copyright (C) 2014-2015  Steven Young <stevenryoung@gmail.com>\n'
+             'This program comes with ABSOLUTELY NO WARRANTY.\n'
+             'This is free software, and you are welcome to redistribute it\n'
+             'under certain conditions; type "show details" for more info\n')
 
 # Configurable through command line options
 gflags.DEFINE_float('delay', 5.0, 'delay (s)')
@@ -39,12 +44,6 @@ gflags.DEFINE_integer('width', 2, 'width')
 gflags.DEFINE_integer('channels', 2, 'number of channels')
 gflags.DEFINE_integer('bffsz', 300, 'size of ring buffer (seconds)')
 gflags.DEFINE_integer('primelen', 5, 'number of chunks to prime output')
-
-COPYRIGHT = ('Sports Radio Delay\n'
-             'Copyright (C) 2014-2015  Steven Young <stevenryoung@gmail.com>\n'
-             'This program comes with ABSOLUTELY NO WARRANTY.\n'
-             'This is free software, and you are welcome to redistribute it\n'
-             'under certain conditions; type "show details" for more info\n')
 
 
 def write_terminal(desired_delay):
