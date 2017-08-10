@@ -11,4 +11,4 @@ setup(name='radiodelay',
       packages=['radiodelay'],
       zip_safe=False,
       install_requires=reqs,
-      package_data=['radiodelay','./*.ini'])
+      package_data=['radiodelay',['./*.ini'])
