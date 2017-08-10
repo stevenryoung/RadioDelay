@@ -26,6 +26,7 @@ import sys
 
 # Initialize Logging
 filename = resource_filename(Requirement.parse('radiodelay'),'radio_delay_log_settings.ini') 
+print filename
 logging.config.fileConfig(filename)
 LOG = logging.getLogger('radio_delay')
 
