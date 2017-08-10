@@ -20,11 +20,13 @@ import logging
 import logging.config
 from multiprocessing import Process, Pipe
 import os
+from pkg_resources import Requirement, resource_filename
 import pyaudio
 import sys
 
 # Initialize Logging
-logging.config.fileConfig('radio_delay_log_settings.ini')
+filename = resource_filename(Requirement.parse('radiodelay'),'radio_delay_log_settings.ini') 
+logging.config.fileConfig(filename)
 LOG = logging.getLogger('radio_delay')
 
 # Some Global Variables
