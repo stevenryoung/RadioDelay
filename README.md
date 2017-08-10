@@ -23,4 +23,6 @@ Online radio often does not allow you to pause in order to delay the radio. Tool
 
 [PyAudio](http://people.csail.mit.edu/hubert/pyaudio/)
 
+If installing via pip in Ubuntu or Mac OSX, make sure to install portaudio first (sudo apt-get install portaudio19-dev or brew install portaudio) 
+
 I have tested this on Ubuntu (using the packages from the Ubuntu repository) and Windows 7 (using the links above).
