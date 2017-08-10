@@ -10,4 +10,5 @@ setup(name='radiodelay',
       license='GPLv3',
       packages=['radiodelay'],
       zip_safe=False,
-      install_requires=reqs)
+      install_requires=reqs,
+      package_data=['radiodelay','*.ini'])
