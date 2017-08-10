@@ -1,6 +1,6 @@
 from setuptools import setup
 
-reqs = ['pyaudio>=0.2.9', 'python-gflags>=2.0.0']
+reqs = ['pyaudio>=0.2.9', 'python-gflags>=2.0.0', "six"] # six is actually a gflags requirement not currently in pypi reqs
 
 setup(name='radiodelay',
       version='0.1.0',
