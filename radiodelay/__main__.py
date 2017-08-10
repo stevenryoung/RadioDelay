@@ -28,7 +28,7 @@ logging.config.fileConfig('radio_delay_log_settings.ini')
 LOG = logging.getLogger('radio_delay')
 
 # Some Global Variables
-RD_VERSION = 'v0.0.1'
+RD_VERSION = '0.1.0-beta'
 DELAY_PROMPT = 'Enter your desired delay in seconds. Enter -1 to quit.\n'
 COPYRIGHT = ('Sports Radio Delay\n'
              'Copyright (C) 2014-2015  Steven Young <stevenryoung@gmail.com>\n'
