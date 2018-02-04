@@ -54,19 +54,21 @@ def write_terminal(desired_delay):
     print COPYRIGHT
     print "Delay (seconds):", desired_delay
     print DELAY_PROMPT
-
+    
+def initialize_stream(audio, flags):
+    return audio.open(format=p.get_format_from_width(flags.width),
+                    channels=flags.channels,
+                    rate=flags.sample_rate,
+                    input=True,
+                    output=True,
+                    frames_per_buffer=flags.chunk)
 
 def delay_loop(conn):
     # Initialize PyAudio
     p = pyaudio.PyAudio()
 
     # Initialize Stream
-    stream = p.open(format=p.get_format_from_width(FLAGS.width),
-                    channels=FLAGS.channels,
-                    rate=FLAGS.sample_rate,
-                    input=True,
-                    output=True,
-                    frames_per_buffer=FLAGS.chunk)
+    stream = initialize_stream(p, FLAGS)
 
     # Establish some parameters
     bps = float(FLAGS.sample_rate) / float(FLAGS.chunk)  # blocks per second
@@ -105,12 +107,7 @@ def delay_loop(conn):
             LOG.warning("Underflow occurred", exc_info=True)
             stream.stop_stream()
             stream.close()
-            stream = p.open(format=p.get_format_from_width(FLAGS.width),
-                            channels=FLAGS.channels,
-                            rate=FLAGS.sample_rate,
-                            input=True,
-                            output=True,
-                            frames_per_buffer=FLAGS.chunk)
+            stream = initialize_stream(p, FLAGS)
             for i in range(FLAGS.primelen):
                 stream.write('0' * blocksize, FLAGS.chunk, exception_on_underflow=False)
 
