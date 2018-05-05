@@ -26,7 +26,7 @@ import sys
 
 # Initialize Logging
 filename = resource_filename('radiodelay','radio_delay_log_settings.ini') 
-print filename
+print(filename)
 logging.config.fileConfig(filename)
 LOG = logging.getLogger('radio_delay')
 
@@ -51,12 +51,12 @@ gflags.DEFINE_integer('primelen', 5, 'number of chunks to prime output')
 
 def write_terminal(desired_delay):
     os.system('cls' if os.name == 'nt' else 'clear')
-    print COPYRIGHT
-    print "Delay (seconds):", desired_delay
-    print DELAY_PROMPT
+    print(COPYRIGHT)
+    print("Delay (seconds):", desired_delay)
+    print(DELAY_PROMPT)
     
 def initialize_stream(audio, flags):
-    return audio.open(format=p.get_format_from_width(flags.width),
+    return audio.open(format=audio.get_format_from_width(flags.width),
                     channels=flags.channels,
                     rate=flags.sample_rate,
                     input=True,
@@ -138,8 +138,8 @@ def main(argv):
     # Read flags
     try:
       argv = FLAGS(argv)  # parse flags
-    except gflags.FlagsError, e:
-      print '%s\\nUsage: %s ARGS\\n%s' % (e, sys.argv[0], FLAGS)
+    except gflags.FlagsError as e:
+      print('%s\\nUsage: %s ARGS\\n%s' % (e, sys.argv[0], FLAGS))
       sys.exit(1)
 
     # Establish pipe for delay process
@@ -158,13 +158,13 @@ def main(argv):
             elif inp > 0.0:  # Update delay
                 pconn1.send(inp)
             else:
-                print "Please use a delay longer than 0 sec."
+                print("Please use a delay longer than 0 sec.")
         except:
             if "show" in inp:  # Give link to license
-                print "See the copy of GPLv3 provided with this program"
-                print "or <http://www.gnu.org/licenses/> for more details."
+                print("See the copy of GPLv3 provided with this program")
+                print("or <http://www.gnu.org/licenses/> for more details.")
             else:
-                print "Improper input."
+                print("Improper input.")
     p1.join()
 
 
