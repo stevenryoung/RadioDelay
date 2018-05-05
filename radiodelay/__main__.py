@@ -14,6 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Python2/3 Compatibility
+from __future__ import print_function
+if hasattr(__builtins__, 'raw_input'):
+    input = raw_input
+
 import gflags
 from gflags import FLAGS
 import logging
@@ -52,7 +57,7 @@ gflags.DEFINE_integer('primelen', 5, 'number of chunks to prime output')
 def write_terminal(desired_delay):
     os.system('cls' if os.name == 'nt' else 'clear')
     print(COPYRIGHT)
-    print("Delay (seconds):", desired_delay)
+    print("Delay (seconds): {}".format(desired_delay))
     print(DELAY_PROMPT)
     
 def initialize_stream(audio, flags):
@@ -149,7 +154,7 @@ def main(argv):
 
     # Loop to check for change in desired delay
     while True:
-        inp = raw_input(DELAY_PROMPT)
+        inp = input(DELAY_PROMPT)
         try:
             inp = float(inp)
             if inp == -1.0:  # Terminate
