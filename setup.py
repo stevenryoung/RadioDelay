@@ -1,9 +1,9 @@
 from setuptools import setup
 
-reqs = ['pyaudio>=0.2.9', 'python-gflags>=2.0.0', "six"] # six is actually a gflags requirement not currently in pypi reqs
+reqs = ['pyaudio>=0.2.9']
 
 setup(name='radiodelay',
-      version='0.1.1a1',
+      version='0.2.0-dev',
       description='Tool for delaying radio to sync to television broadcast.',
       url='https://github.com/stevenryoung/RadioDelay',
       author='Steven R. Young',

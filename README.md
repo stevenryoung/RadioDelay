@@ -7,7 +7,7 @@ Python tool to delay radio (or any generic audio input)
 
 RADIO >> AUDIO CABLE >> PC >> (OPTIONAL) AUDIO CABLE >> (OPTIONAL) SPEAKERS
 
-Run radio_delay.py and adjust delay as appropriate.
+Run '''radiodelay/__main__.py''' and adjust delay as appropriate.
 
 ## Why?
 
@@ -19,7 +19,7 @@ Online radio often does not allow you to pause in order to delay the radio. Tool
 
 ## Requirements
 
-[Python 2.7 (32-bit if using Windows)](https://www.python.org/download/releases/2.7.7/)
+[Python 2.7 (32-bit if using Windows) or Python 3.6](https://www.python.org/download/releases/2.7.7/)
 
 [PyAudio](http://people.csail.mit.edu/hubert/pyaudio/)
 
@@ -27,7 +27,7 @@ I have tested this on Ubuntu (using the packages from the Ubuntu repository) and
 
 ## Pip Install
 
-If installing via pip in Ubuntu or Mac OSX, make sure to install portaudio first (sudo apt-get install portaudio19-dev or brew install portaudio) 
+If installing via pip in Ubuntu or Mac OSX, make sure to install portaudio first (sudo apt install portaudio19-dev or brew install portaudio) 
 
 pip install radiodelay
 
