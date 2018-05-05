@@ -11,7 +11,7 @@ Run radio_delay.py and adjust delay as appropriate.
 
 ## Why?
 
-National broadcast announcers are not as interesting to listen to as local broadcasters when you are watching your team play. Thus, it is nice to listen to your local radio broadcast when you are watching the TV broadcast. However, radio broadcasts are often 10-30 seconds ahead of the TV broadcast and ruin the experience of watching the game. You cannot make your play the game sooner with your DVR, so you must make the radio play later. This tool allows you to do that.
+National broadcast announcers are not as interesting to listen to as local broadcasters when you are watching your team play. Thus, it is nice to listen to your local radio broadcast when you are watching the TV broadcast. However, radio broadcasts are often 10-30 seconds ahead of the TV broadcast and ruin the experience of watching the game. You cannot make your TV play the game sooner with your DVR, so you must make the radio play later. This tool allows you to do that.
 
 ## Why not just get the radio broadcast online?
 
@@ -23,6 +23,12 @@ Online radio often does not allow you to pause in order to delay the radio. Tool
 
 [PyAudio](http://people.csail.mit.edu/hubert/pyaudio/)
 
+I have tested this on Ubuntu (using the packages from the Ubuntu repository) and Windows 7 (using the links above).
+
+## Pip Install
+
 If installing via pip in Ubuntu or Mac OSX, make sure to install portaudio first (sudo apt-get install portaudio19-dev or brew install portaudio) 
 
-I have tested this on Ubuntu (using the packages from the Ubuntu repository) and Windows 7 (using the links above).
+pip install radiodelay
+
+python -m radiodelay
