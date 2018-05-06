@@ -1,3 +1,6 @@
+# 0.2.1
+- Package info changes. No functional change.
+
 # 0.2.0
 - Updated for Python 3 compatibility
 - Removed gflags dependency and replaced with argparse
