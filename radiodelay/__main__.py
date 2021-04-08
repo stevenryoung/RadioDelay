@@ -35,11 +35,11 @@ logging.config.fileConfig(log_settings_file)
 LOG = logging.getLogger("radio_delay")
 
 # Some Global Variables
-RD_VERSION = "0.2.0-dev"
+RD_VERSION = "0.3.0-dev"
 DELAY_PROMPT = "Enter your desired delay in seconds. Enter -1 to quit.\n"
 COPYRIGHT = (
     "Sports Radio Delay\n"
-    "Copyright (C) 2014-2015  Steven Young <stevenryoung@gmail.com>\n"
+    "Copyright (C) 2014-2021  Steven Young <stevenryoung@gmail.com>\n"
     "This program comes with ABSOLUTELY NO WARRANTY.\n"
     "This is free software, and you are welcome to redistribute it\n"
     'under certain conditions; type "show details" for more info\n'
