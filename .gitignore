@@ -21,6 +21,8 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+.venv/
+venv/
 
 # Installer logs
 pip-log.txt
@@ -55,3 +57,11 @@ docs/_build/
 # Text editor files
 *~
 *.swp
+
+# IDE/Editor settings
+.vscode/
+.idea/
+*.code-workspace
+*.swo
+*~
+
