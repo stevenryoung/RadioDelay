@@ -10,7 +10,7 @@ Python tool to delay radio (or any generic audio input)
 
 RADIO >> AUDIO CABLE >> PC >> (OPTIONAL) AUDIO CABLE >> (OPTIONAL) SPEAKERS
 
-Run '''radiodelay/__main__.py''' and adjust delay as appropriate.
+Run `radiodelay/__main__.py` and adjust delay as appropriate.
 
 ## Why?
 
@@ -22,16 +22,21 @@ Online radio often does not allow you to pause in order to delay the radio. Tool
 
 ## Requirements
 
-[Python 2.7 (32-bit if using Windows) or Python 3.6](https://www.python.org/download/releases/2.7.7/)
+[Python 3.10+](https://www.python.org/downloads/)
 
 [PyAudio](http://people.csail.mit.edu/hubert/pyaudio/)
 
-I have tested this on Ubuntu (using the packages from the Ubuntu repository) and Windows 7 (using the links above).
+Tested on Ubuntu, Raspberry Pi OS and Windows 11.
 
 ## Pip Install
+- Windows
+  - To avoid fussing with compilation tools and dev libraries, install a version of Python that has a PyAudio "wheel" package available (e.g., CPython 3.13). [Consult this PyAudio release list to find supported versions](https://pypi.org/project/PyAudio/#files), then [get the corresponding Python installer](https://www.python.org/downloads/).
+  - `python -m pip install radiodelay`
+    - Note the script path described in the warning
+  - `C:\Users\MyUserName\AppData\Local\Programs\Python\Python313\Scripts\radiodelay.exe`
+    - Adjust path as appropriate based on the message during "pip install"
 
-If installing via pip in Ubuntu or Mac OSX, make sure to install portaudio first (sudo apt install portaudio19-dev or brew install portaudio) 
-
-pip install radiodelay
-
-python -m radiodelay
+- Ubuntu, Mac OSX
+  - Make sure to install portaudio first (sudo apt install portaudio19-dev or brew install portaudio)
+  - `python -m pip install radiodelay`
+  - `radiodelay`
